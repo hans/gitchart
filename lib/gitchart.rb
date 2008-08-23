@@ -40,6 +40,3 @@ class GitChart
     end
   end
 end
-
-g = GitChart.new
-g.run
