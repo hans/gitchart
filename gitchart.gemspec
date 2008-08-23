@@ -3,6 +3,7 @@ Gem::Specification.new do |s|
   s.name = 'gitchart'
   s.version = '1.0'
   s.date = '2008-08-23'
+  s.homepage = 'http://github.com/hans/gitchart'
   s.author = 'Hans Engel'
   s.email = 'spam.me@engel.uk.to'
   s.summary = 'Generate cool stats about Git repositories'
