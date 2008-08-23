@@ -7,7 +7,7 @@ require 'grit'
 include Grit
 
 class GitChart
-  def initialize(size = '1000x300', threed = true, repo = '.')
+  def initialize(size = '1000x300', threed = true, repo = '.', branch = 'master')
     begin
       @repo = Repo.new(repo)
     rescue
@@ -15,15 +15,17 @@ class GitChart
     end
     @size = size
     @threed = threed
+    @branch = branch
   end
   
   def run
+    @commits = @repo.commits @branch, 100
     chart_authors
   end
   
   def chart_authors
     authors = {}
-    @repo.commits.each do |c|
+    @commits.each do |c|
       if authors[c.author.to_s]
         authors[c.author.to_s] += 1
       else
