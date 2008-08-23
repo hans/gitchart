@@ -7,12 +7,14 @@ require 'grit'
 include Grit
 
 class GitChart
-  def initialize(repo = '.')
+  def initialize(size = '1000x300', threed = true, repo = '.')
     begin
       @repo = Repo.new(repo)
     rescue
       raise "Could not initialize Grit instance."
     end
+    @size = size
+    @threed = threed
   end
   
   def run
@@ -28,7 +30,7 @@ class GitChart
         authors[c.author.to_s] = 1
       end
     end
-    PieChart.new('320x200', 'Repository Authors', false) do |pc|
+    PieChart.new(@size, 'Repository Authors', @threed) do |pc|
       authors.each do |a, num|
         pc.data a, num
       end
