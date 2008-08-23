@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'gitchart'
+
+gc = GitChart.new
+gc.run
