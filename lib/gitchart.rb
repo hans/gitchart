@@ -65,7 +65,14 @@ EOF
   def run
     puts "Generating chart data . . ."
     puts "This may take a while, depending on the size of your repository."
-    @commits = @repo.commits @branch, 500
+    begin
+      @commits = @repo.commits_since @branch
+    rescue SystemStackError
+      puts "Uh oh, your repository is humongous. We're going to have to only grab stats for the last several hundred."
+      puts "How many commits should be graphed? (750 is probably as far as you can get). "
+      amt = gets
+      @commits = @repo.commits @branch, amt.strip.to_i
+    end
     chart_authors
     chart_commits
     chart_extensions
