@@ -6,7 +6,6 @@ See the file LICENSE for licensing details.
 require 'ftools'
 require 'tempfile'
 
-require 'gitchart'
 require 'platform'
 require 'google_chart'
 include GoogleChart
