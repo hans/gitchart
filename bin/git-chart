@@ -8,5 +8,21 @@ See the file LICENSE for licensing details.
 begin; require 'rubygems'; rescue LoadError; end
 require 'gitchart'
 
-gc = GitChart.new
+repo = '.'
+branch = 'master'
+size = '1000x300'
+threed = true
+
+repo = ARGV[0] if ARGV[0]
+branch = ARGV[1] if ARGV[1]
+size = ARGV[2] if ARGV[2]
+
+if ARGV[3]
+  threed = case ARGV[3]
+  when 'true': true
+  when 'false': false
+  end
+end
+
+gc = GitChart.new size, threed, repo, branch
 gc.run
