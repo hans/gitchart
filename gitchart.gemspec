@@ -1,3 +1,8 @@
+=begin
+Copyright (c) 2008 Hans Engel
+See the file LICENSE for licensing details.
+=end
+
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.name = 'gitchart'
@@ -8,6 +13,7 @@ Gem::Specification.new do |s|
   s.email = 'spam.me@engel.uk.to'
   s.summary = 'Generate cool stats about Git repositories'
   s.files = [
+    'LICENSE',
     'Rakefile',
     'gitchart.gemspec',
     'lib/gitchart.rb',

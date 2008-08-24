@@ -1,3 +1,8 @@
+=begin
+Copyright (c) 2008 Hans Engel
+See the file LICENSE for licensing details.
+=end
+
 require 'ftools'
 require 'rubygems'
 require 'tempfile'
