@@ -74,7 +74,8 @@ EOF
       @commits = @repo.commits @branch, amt.strip.to_i
     end
     chart_authors
-    chart_commits
+    chart_commits :bar
+    chart_commits :line
     chart_extensions
     chart_awesomeness
     output
@@ -97,7 +98,7 @@ EOF
     end
   end
   
-  def chart_commits
+  def chart_commits(type)
     weeks = Array.new 53, 0
     @commits.each do |c|
       time = Time.parse c.committed_date.to_s
@@ -105,10 +106,20 @@ EOF
       weeks[week.to_i] ||= 0
       weeks[week.to_i] += 1
     end
-    BarChart.new(@size, 'Commit Frequency', :vertical, @threed) do |bc|
-      bc.data '', weeks
-      bc.axis :y, { :range => [0, weeks.max] }
-      @html += "<img src='#{bc.to_url}' alt='Commit Frequency' /><br/>"
+    case type
+    when :bar:
+      BarChart.new(@size, 'Commit Frequency', :vertical, @threed) do |bc|
+        bc.data 'Commits', weeks
+        bc.axis :y, { :range => [0, weeks.max] }
+        @html += "<img src='#{bc.to_url}' alt='Commit Frequency' /><br/>"
+      end
+    when :line:
+      weeks.pop while weeks.last.zero?
+      LineChart.new @size, 'Commit Frequency' do |lc|
+        lc.data 'Commits', weeks
+        lc.axis :y, { :range => [0, weeks.max] }
+        @html += "<img src='#{lc.to_url}' alt='Commit Frequency' /><br/>"
+      end
     end
   end
   
