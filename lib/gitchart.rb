@@ -63,7 +63,7 @@ EOF
   end
   
   def run
-    @commits = @repo.commits @branch, 100
+    @commits = @repo.commits_since @branch
     chart_authors
     chart_commits
     chart_extensions
