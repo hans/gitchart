@@ -60,6 +60,7 @@ EOF
   def run
     @commits = @repo.commits @branch, 100
     chart_authors
+    chart_extensions
     output
   end
   
@@ -77,6 +78,35 @@ EOF
         pc.data a, num
       end
       @html += "<img src='#{pc.to_url}' alt='Repository Authors' /><br/>"
+    end
+  end
+  
+  def chart_extensions
+    @extensions = {}
+    @tree = @commits.first.tree
+    extensions_add_tree @tree
+    PieChart.new(@size, 'Popular Extensions', @threed) do |pc|
+      @extensions.each do |ext, num|
+        pc.data ext, num
+      end
+      @html += "<img src='#{pc.to_url}' alt='Popular Extensions' /><br/>"
+    end
+  end
+  def extensions_add_tree(tree)
+    tree.contents.each do |el|
+      if Blob === el
+        extensions_add_blob el
+      elsif Tree === el
+        extensions_add_tree el
+      end
+    end
+  end
+  def extensions_add_blob(el)
+    ext = File.extname el.name
+    if ext == ''
+      @extensions['Other'] += 1 rescue @extensions['Other'] = 1
+    else
+      @extensions[ext] += 1 rescue @extensions[ext] = 1
     end
   end
   
