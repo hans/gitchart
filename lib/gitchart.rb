@@ -18,6 +18,7 @@ class GitChart
     @size = size
     @threed = threed
     @branch = branch
+    @files = 0
     if repo == '.'
       rpath = Dir.getwd
     else
@@ -62,6 +63,7 @@ EOF
     chart_authors
     chart_commits
     chart_extensions
+    chart_awesomeness
     output
   end
   
@@ -124,6 +126,16 @@ EOF
     else
       @extensions[ext] += 1 rescue @extensions[ext] = 1
     end
+    @files += 1
+  end
+  
+  def chart_awesomeness
+    @extensions['.rb'] ||= 0.1
+    awesomeness = @files / @extensions['.rb']
+    awesomeness = ( awesomeness * 100 ).round / 100.0
+    awesomeness = 0.1 if @extensions['.rb'] == 0.1
+    url = "http://chart.apis.google.com/chart?cht=gom&chtt=Repository+Awesomeness&chs=#{@size}&chl=#{awesomeness}%25&chd=t:#{awesomeness}"
+    @html += "<img src='#{url}' alt='Repository Awesomeness' /><br/><br/>"
   end
   
   def output
