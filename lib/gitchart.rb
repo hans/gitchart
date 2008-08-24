@@ -77,6 +77,7 @@ EOF
     chart_commits :bar
     chart_commits :line
     chart_extensions
+    chart_bytes
     chart_awesomeness
     output
   end
@@ -151,6 +152,32 @@ EOF
       @extensions[ext] += 1 rescue @extensions[ext] = 1
     end
     @files += 1
+  end
+  
+  def chart_bytes
+    @bytes = Array.new
+    @commits.each do |c|
+      @bytes.push 0
+      bytes_add_tree c.tree
+    end
+    LineChart.new(@size, 'Total Filesize') do |lc|
+      lc.data 'Bytes', @bytes
+      lc.axis :y, { :range => [0, @bytes.max] }
+      @html += "<img src='#{lc.to_url}' alt='Total Filesize' /><br/>"
+    end
+  end
+  def bytes_add_tree(tree)
+    tree.contents.each do |el|
+      if Blob === el
+        bytes_add_blob el
+      elsif Tree === el
+        bytes_add_tree el
+      end
+    end
+  end
+  def bytes_add_blob(blob)
+    bytes = blob.size
+    @bytes[-1] += bytes
   end
   
   def chart_awesomeness
