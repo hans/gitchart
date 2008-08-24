@@ -60,6 +60,7 @@ EOF
   def run
     @commits = @repo.commits @branch, 100
     chart_authors
+    chart_commits
     chart_extensions
     output
   end
@@ -78,6 +79,21 @@ EOF
         pc.data a, num
       end
       @html += "<img src='#{pc.to_url}' alt='Repository Authors' /><br/>"
+    end
+  end
+  
+  def chart_commits
+    weeks = Array.new 53, 0
+    @commits.each do |c|
+      time = Time.parse c.committed_date.to_s
+      week = time.strftime '%U'
+      weeks[week.to_i] ||= 0
+      weeks[week.to_i] += 1
+    end
+    BarChart.new(@size, 'Commit Frequency', :vertical, @threed) do |bc|
+      bc.data '', weeks
+      bc.axis :y, { :range => [0, weeks.max] }
+      @html += "<img src='#{bc.to_url}' alt='Commit Frequency' /><br/>"
     end
   end
   
