@@ -7,7 +7,11 @@ Gem::Specification.new do |s|
   s.author = 'Hans Engel'
   s.email = 'spam.me@engel.uk.to'
   s.summary = 'Generate cool stats about Git repositories'
-  s.files = ['lib/gitchart.rb', 'bin/git-chart']
+  s.files = [
+    'Rakefile',
+    'gitchart.gemspec',
+    'lib/gitchart.rb',
+    'bin/git-chart']
   s.bindir = 'bin'
   s.executables = ['git-chart']
   s.require_paths = ['lib']
