@@ -64,6 +64,8 @@ EOF
   
   def run
     @commits = @repo.commits_since @branch
+    puts "Generating chart data . . ."
+    puts "This may take a while, depending on the size of your repository."
     chart_authors
     chart_commits
     chart_extensions
