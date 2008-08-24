@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
     'Rakefile',
     'gitchart.gemspec',
     'lib/gitchart.rb',
+    'lib/platform.rb',
     'bin/git-chart']
   s.bindir = 'bin'
   s.executables = ['git-chart']

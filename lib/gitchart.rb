@@ -4,12 +4,12 @@ See the file LICENSE for licensing details.
 =end
 
 require 'ftools'
-require 'rubygems'
 require 'tempfile'
 
+require 'gitchart'
+require 'platform'
 require 'google_chart'
 include GoogleChart
-
 require 'grit'
 include Grit
 
@@ -153,7 +153,15 @@ EOF
     t.flush
     f = t.path + '.html'
     File.move t.path, f
-    `open #{f}`
-    #File.delete(f.path)
+    case Platform::OS
+    when :unix:
+      if Platform::IMPL == :macosx
+        `open #{f}`
+      else
+        `xdg-open #{f}`
+      end
+    when :win32:
+      `start #{f}`
+    end
   end
 end
