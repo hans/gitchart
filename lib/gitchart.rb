@@ -76,6 +76,7 @@ EOF
     chart_authors
     chart_commits :bar
     chart_commits :line
+    chart_hours
     chart_extensions
     chart_bytes
     chart_awesomeness
@@ -123,6 +124,23 @@ EOF
         lc.axis :y, { :range => [0, weeks.max] }
         @html += "<img src='#{lc.to_url}' alt='Commit Frequency' /><br/>"
       end
+    end
+  end
+  
+  def chart_hours
+    generating_chart 'Commit Hours'
+    hours = Hash.new
+    @commits.each do |c|
+      date = Time.parse c.committed_date.to_s
+      hour = date.strftime '%H'
+      hours[hour.to_i] ||= 0
+      hours[hour.to_i] += 1
+    end
+    PieChart.new(@size, 'Commit Hours', @threed) do |pc|
+      hours.each do |hr, num|
+        pc.data hr.to_s + ':00 - ' + hr.to_s + ':59', num
+      end
+      @html += "<img src='#{pc.to_url}' alt='Commit Hours' /><br/>"
     end
   end
   
