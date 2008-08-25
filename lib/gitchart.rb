@@ -160,6 +160,7 @@ EOF
       @bytes.push 0
       bytes_add_tree c.tree
     end
+    @bytes = @bytes.reverse
     LineChart.new(@size, 'Total Filesize') do |lc|
       lc.data 'Bytes', @bytes
       lc.axis :y, { :range => [0, @bytes.max] }
