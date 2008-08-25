@@ -83,6 +83,7 @@ EOF
   end
   
   def chart_authors
+    generating_chart 'Repository Authors'
     authors = {}
     @commits.each do |c|
       if authors[c.author.to_s]
@@ -100,6 +101,7 @@ EOF
   end
   
   def chart_commits(type)
+    generating_chart 'Commit Frequency'
     weeks = Array.new 53, 0
     @commits.each do |c|
       time = Time.parse c.committed_date.to_s
@@ -125,6 +127,7 @@ EOF
   end
   
   def chart_extensions
+    generating_chart 'Popular Extensions'
     @extensions = {}
     @tree = @commits.first.tree
     extensions_add_tree @tree
@@ -155,6 +158,7 @@ EOF
   end
   
   def chart_bytes
+    generating_chart 'Total Filesize'
     @bytes = Array.new
     @commits.each do |c|
       @bytes.push 0
@@ -182,12 +186,17 @@ EOF
   end
   
   def chart_awesomeness
+    generating_chart 'Repository Awesomeness'
     @extensions['.rb'] ||= 0.1
     awesomeness = @files / @extensions['.rb']
     awesomeness = ( awesomeness * 100 ).round / 100.0
     awesomeness = 0.1 if @extensions['.rb'] == 0.1
     url = "http://chart.apis.google.com/chart?cht=gom&chtt=Repository+Awesomeness&chs=#{@size}&chl=#{awesomeness}%25&chd=t:#{awesomeness}"
     @html += "<img src='#{url}' alt='Repository Awesomeness' /><br/><br/>"
+  end
+  
+  def generating_chart(chart)
+    puts "Generating chart '#{chart}' . . ."
   end
   
   def output
