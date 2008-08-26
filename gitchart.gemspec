@@ -6,9 +6,9 @@ See the file LICENSE for licensing details.
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.name = 'gitchart'
-  s.version = '1.0'
+  s.version = '1.1'
   s.date = '2008-08-23'
-  s.homepage = 'http://github.com/hans/gitchart'
+  s.homepage = 'http://gitchart.rubyforge.org'
   s.author = 'Hans Engel'
   s.email = 'spam.me@engel.uk.to'
   s.summary = 'Generate cool stats about Git repositories'
