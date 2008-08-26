@@ -87,10 +87,12 @@ EOF
     generating_chart 'Repository Authors'
     authors = {}
     @commits.each do |c|
+      puts "\treading commit #{c.id[0, 7]}" if $vv
       if authors[c.author.to_s]
         authors[c.author.to_s] += 1
       else
         authors[c.author.to_s] = 1
+        puts "\t\tauthor: #{c.author.to_s}" if $v or $vv
       end
     end
     PieChart.new(@size, 'Repository Authors', @threed) do |pc|
@@ -105,6 +107,7 @@ EOF
     generating_chart 'Commit Frequency'
     weeks = Array.new 53, 0
     @commits.each do |c|
+      puts "\treading commit #{c.id[0, 7]}" if $vv
       time = Time.parse c.committed_date.to_s
       week = time.strftime '%U'
       weeks[week.to_i] ||= 0
@@ -131,6 +134,7 @@ EOF
     generating_chart 'Commit Hours'
     hours = Hash.new
     @commits.each do |c|
+      puts "\treading commit #{c.id[0, 7]}" if $vv
       date = Time.parse c.committed_date.to_s
       hour = date.strftime '%H'
       hours[hour.to_i] ||= 0
@@ -149,6 +153,10 @@ EOF
     @extensions = {}
     @tree = @commits.first.tree
     extensions_add_tree @tree
+    if $v or $vv
+      print "\textensions: "
+      p @extensions
+    end
     PieChart.new(@size, 'Popular Extensions', @threed) do |pc|
       @extensions.each do |ext, num|
         pc.data ext, num
@@ -179,8 +187,10 @@ EOF
     generating_chart 'Total Filesize'
     @bytes = Array.new
     @commits.each do |c|
+      print "\treading commit #{c.id[0, 7]}" if $vv
       @bytes.push 0
       bytes_add_tree c.tree
+      puts " (#{@bytes.last} bytes)" if $vv
     end
     @bytes = @bytes.reverse
     LineChart.new(@size, 'Total Filesize') do |lc|
@@ -209,6 +219,7 @@ EOF
     awesomeness = @files / @extensions['.rb']
     awesomeness = ( awesomeness * 100 ).round / 100.0
     awesomeness = 0.1 if @extensions['.rb'] == 0.1
+    puts "\tawesomeness: #{awesomeness}%" if $v or $vv
     url = "http://chart.apis.google.com/chart?cht=gom&chtt=Repository+Awesomeness&chs=#{@size}&chl=#{awesomeness}%25&chd=t:#{awesomeness}"
     @html += "<img src='#{url}' alt='Repository Awesomeness' /><br/><br/>"
   end
@@ -227,15 +238,24 @@ EOF
     t.flush
     f = t.path + '.html'
     File.move t.path, f
+    program = ''
     case Platform::OS
     when :unix:
       if Platform::IMPL == :macosx
+        print "determined that platform = osx" if $v or $vv
+        program = 'open'
         `open #{f}`
       else
+        print "determined that platform = unix" if $v or $vv
+        program = 'xdg-open'
         `xdg-open #{f}`
       end
     when :win32:
+      print "determined that platform = win32" if $v or $vv
+      program = 'start'
       `start #{f}`
     end
+    puts ". . . using `#{program}` to open the HTML page" if $v or $vv
+    puts "final file path: " + f if $v or $vv
   end
 end
