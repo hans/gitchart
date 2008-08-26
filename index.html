@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head profile="http://purl.org/uF/2008/03">
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>gitchart</title>
+		<style type="text/css">
+			* { margin: 0; padding: 0; }
+			body { width: 500px; margin: 0 auto; font-size: 13px; }
+			img { display: block; width: 366px; height: 186px; margin: 40px auto; padding: 2px; border: 1px solid #ddd; }
+		</style>
+	</head>
+	<body>
+		<p><img src="http://i277.photobucket.com/albums/kk55/hansengel/gitchart.jpg" alt="" /></p>
+		<p>GitChart is a tool to generate statistics about Git repositories. The application utilizes Grit for its Git interface, and Google Charts for graphing the results.</p>
+		<h1>Installation</h1>
+			<p>To install GitChart, make sure you have RubyGems installed with <code>gems.github.com</code> added as a source. Then, just run this command:</p>
+			<pre class="console">sudo gem install hansengel-gitchart</pre>
+		<h1>Usage</h1>
+			<p>Once you have GitChart installed, just change directory to a Git repository in your terminal and run:</p>
+			<pre class="console">git-chart</pre>
+			<p>There are some optional configuration options that can be provided.</p>
+			<pre class="console">git-chart _repository_ _branch_ _chartsize_ _3d_</pre>
+			The options&#8217; explanations:
+			<ul>
+				<li><em>repository</em>: The directory of the Git repository to load stats from. Defaults to &#8217;.&#8217; (the current directory).</li>
+				<li><em>branch</em>: The branch to read stats from (this doesn&#8217;t apply to the charts that utilize all branches). Defaults to &#8216;master&#8217;.</li>
+				<li><em>chartsize</em>: The maximum chart size, which is provided to Google Charts. Defaults to &#8216;1000&#215;300&#8217;.</li>
+				<li><em>3d</em>: Whether or not to use 3D pie charts. Can be <code>true</code> or <code>false</code>; defaults to <code>true</code>.</li>
+			</ul>
+	</body>
+</html>
