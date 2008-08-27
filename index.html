@@ -7,9 +7,12 @@
 		<style type="text/css">
 			* { margin: 0; padding: 0; overflow: hidden; }
 			body { background-color: #111; color: #888; font-size: 13px; }
+			a { color: #999; font-weight: bold; text-decoration: none; }
+			a:hover { color: #777; }
 			h1 { text-align: center; margin: 10px 0; color: #bbb; }
 			pre { margin: 7px 5px; background-color: #000; padding: 7px; border: 1px solid #555; color: #bbb; }
-			#container { width: 500px; display: none; background-color: #222; margin: 0 auto; padding: 15px 15px 40px 15px; }
+			#container { width: 500px; display: none; background-color: #222; margin: 0 auto; padding: 15px 15px 30px 15px; }
+			#by { margin: 30px 10px 0 0; float: right; font-size: 40px; }
 		</style>
 		<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery.js"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -41,6 +44,9 @@
 					<li><em>chartsize</em>: The maximum chart size, which is provided to Google Charts. Defaults to &#8216;1000&#215;300&#8217;.</li>
 					<li><em>3d</em>: Whether or not to use 3D pie charts. Can be <code>true</code> or <code>false</code>; defaults to <code>true</code>.</li>
 				</ul>
+				<div id="by">
+					<a href="http://engel.uk.to">&#9730;</a>
+				</div>
 		</div>
 	</body>
 </html>
