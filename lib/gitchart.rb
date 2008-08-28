@@ -135,7 +135,7 @@ EOF
     generating_chart 'Commits By Branch'
     branches = {}
     @repo.branches.each do |b|
-      branches[b.name] = @repo.commits_since(b.name).length
+      branches[b.name] = @repo.commit_count b.name
     end
     PieChart.new(@size, 'Commits By Branch', @threed) do |pc|
       branches.each do |b, num|
