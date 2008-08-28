@@ -76,6 +76,7 @@ EOF
     chart_authors
     chart_commits :bar
     chart_commits :line
+    chart_branches
     chart_hours
     chart_extensions
     chart_bytes
@@ -127,6 +128,20 @@ EOF
         lc.axis :y, { :range => [0, weeks.max] }
         @html += "<img src='#{lc.to_url}' alt='Commit Frequency' /><br/>"
       end
+    end
+  end
+  
+  def chart_branches
+    generating_chart 'Commits By Branch'
+    branches = {}
+    @repo.branches.each do |b|
+      branches[b.name] = @repo.commits_since(b.name).length
+    end
+    PieChart.new(@size, 'Commits By Branch', @threed) do |pc|
+      branches.each do |b, num|
+        pc.data b + " (#{num})", num
+      end
+      @html += "<img src='#{pc.to_url}' alt='Commits By Branch' /><br/>"
     end
   end
   
