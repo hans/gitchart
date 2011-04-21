@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.executables = ['git-chart']
   s.require_paths = ['lib']
   s.add_dependency('gchartrb', '>= 0.8')
-  s.add_dependency('schacon-grit', '>= 0.9.3')
+  s.add_dependency('grit', '>= 0.9.3')
 end

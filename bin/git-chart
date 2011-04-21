@@ -19,8 +19,10 @@ size = ARGV[2] if ARGV[2]
 
 if ARGV[3]
   threed = case ARGV[3]
-  when 'true': true
-  when 'false': false
+  when 'true' 
+    true
+  when 'false'
+    false
   end
 end
 

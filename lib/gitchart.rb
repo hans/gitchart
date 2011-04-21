@@ -3,7 +3,7 @@ Copyright (c) 2008 Hans Engel
 See the file LICENSE for licensing details.
 =end
 
-require 'ftools'
+require 'fileutils'
 require 'tempfile'
 
 require 'platform'
@@ -115,13 +115,13 @@ EOF
       weeks[week.to_i] += 1
     end
     case type
-    when :bar:
+    when :bar
       BarChart.new(@size, 'Commit Frequency', :vertical, @threed) do |bc|
         bc.data 'Commits', weeks
         bc.axis :y, { :range => [0, weeks.max] }
         @html += "<img src='#{bc.to_url}' alt='Commit Frequency' /><br/>"
       end
-    when :line:
+    when :line
       weeks.pop while weeks.last.zero?
       LineChart.new @size, 'Commit Frequency' do |lc|
         lc.data 'Commits', weeks
@@ -255,7 +255,7 @@ EOF
     File.move t.path, f
     program = ''
     case Platform::OS
-    when :unix:
+    when :unix
       if Platform::IMPL == :macosx
         print "determined that platform = osx" if $v or $vv
         program = 'open'
@@ -265,7 +265,7 @@ EOF
         program = 'xdg-open'
         `xdg-open #{f}`
       end
-    when :win32:
+    when :win32
       print "determined that platform = win32" if $v or $vv
       program = 'start'
       `start #{f}`
