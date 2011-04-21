@@ -252,7 +252,7 @@ EOF
     t.print @html
     t.flush
     f = t.path + '.html'
-    File.move t.path, f
+    FileUtils.mv t.path, f
     program = ''
     case Platform::OS
     when :unix
