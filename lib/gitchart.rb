@@ -58,10 +58,10 @@ class GitChart
         <td>#{Time.now.to_s}</td>
       </tr>
     </table>
-    
+
 EOF
   end
-  
+
   def run
     puts "Generating chart data . . ."
     puts "This may take a while, depending on the size of your repository."
@@ -70,7 +70,7 @@ EOF
     rescue SystemStackError
       puts "Uh oh, your repository is humongous. We're going to have to only grab stats for the last several hundred."
       puts "How many commits should be graphed? (750 is probably as far as you can get). "
-      amt = gets
+      amt = gets || 750
       @commits = @repo.commits @branch, amt.strip.to_i
     end
     chart_authors
@@ -83,7 +83,7 @@ EOF
     chart_awesomeness
     output
   end
-  
+
   def chart_authors
     generating_chart 'Repository Authors'
     authors = {}
@@ -103,7 +103,7 @@ EOF
       @html += "<img src='#{pc.to_url}' alt='Repository Authors' /><br/>"
     end
   end
-  
+
   def chart_commits(type)
     generating_chart 'Commit Frequency'
     weeks = Array.new 53, 0
@@ -130,7 +130,7 @@ EOF
       end
     end
   end
-  
+
   def chart_branches
     generating_chart 'Commits By Branch'
     branches = {}
@@ -144,7 +144,7 @@ EOF
       @html += "<img src='#{pc.to_url}' alt='Commits By Branch' /><br/>"
     end
   end
-  
+
   def chart_hours
     generating_chart 'Commit Hours'
     hours = Hash.new
@@ -162,7 +162,7 @@ EOF
       @html += "<img src='#{pc.to_url}' alt='Commit Hours' /><br/>"
     end
   end
-  
+
   def chart_extensions
     generating_chart 'Popular Extensions'
     @extensions = {}
@@ -197,7 +197,7 @@ EOF
     end
     @files += 1
   end
-  
+
   def chart_bytes
     generating_chart 'Total Filesize'
     @bytes = Array.new
@@ -227,7 +227,7 @@ EOF
     bytes = blob.size
     @bytes[-1] += bytes
   end
-  
+
   def chart_awesomeness
     generating_chart 'Repository Awesomeness'
     @extensions['.rb'] ||= 0.1
@@ -238,11 +238,11 @@ EOF
     url = "http://chart.apis.google.com/chart?cht=gom&chtt=Repository+Awesomeness&chs=#{@size}&chl=#{awesomeness}%25&chd=t:#{awesomeness}"
     @html += "<img src='#{url}' alt='Repository Awesomeness' /><br/><br/>"
   end
-  
+
   def generating_chart(chart)
     puts "Generating chart '#{chart}' . . ."
   end
-  
+
   def output
     @html += <<EOF
   </body>
