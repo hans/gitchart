@@ -106,22 +106,27 @@ EOF
 
   def chart_commits(type)
     generating_chart 'Commit Frequency'
-    weeks = Array.new 53, 0
-    @commits.each do |c|
-      puts "\treading commit #{c.id[0, 7]}" if $vv
-      time = Time.parse c.committed_date.to_s
-      week = time.strftime '%U'
-      weeks[week.to_i] ||= 0
-      weeks[week.to_i] += 1
+
+    if @weeks.nil?
+      @weeks = Array.new 53, 0
+      @commits.each do |c|
+        puts "\treading commit #{c.id[0, 7]}" if $vv
+        time = Time.parse c.committed_date.to_s
+        week = time.strftime '%U'
+        @weeks[week.to_i] ||= 0
+        @weeks[week.to_i] += 1
+      end
     end
+
     case type
     when :bar
       BarChart.new(@size, 'Commit Frequency', :vertical, @threed) do |bc|
-        bc.data 'Commits', weeks
-        bc.axis :y, { :range => [0, weeks.max] }
+        bc.data 'Commits', @weeks
+        bc.axis :y, { :range => [0, @weeks.max] }
         @html += "<img src='#{bc.to_url}' alt='Commit Frequency' /><br/>"
       end
     when :line
+      weeks = @weeks.dup
       weeks.pop while weeks.last.zero?
       LineChart.new @size, 'Commit Frequency' do |lc|
         lc.data 'Commits', weeks
