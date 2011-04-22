@@ -205,32 +205,63 @@ EOF
 
   def chart_bytes
     generating_chart 'Total Filesize'
-    @bytes = Array.new
-    @commits.each do |c|
+    rev_commits = @commits.reverse
+
+    # We need to recurse the first commit's tree to get a starting size. After
+    # that, we can just track the commit deltas (much faster).
+    first_commit = rev_commits.shift
+    print "\treading commit #{first_commit.id[0, 7]}" if $vv
+    first_commit_bytes = bytes_recurse(first_commit.tree)
+    puts " (#{first_commit_bytes} bytes)" if $vv
+
+    bytes = [ first_commit_bytes ]
+
+    rev_commits.each do |c|
       print "\treading commit #{c.id[0, 7]}" if $vv
-      @bytes.push 0
-      bytes_add_tree c.tree
-      puts " (#{@bytes.last} bytes)" if $vv
+
+      commit_delta = 0
+      prev_commit_bytes = bytes[-1] || 0
+
+      c.diffs.each do |diff|
+        diff_delta = 0
+
+        if diff.deleted_file
+          # if the file was deleted, subtract the former blob size from the delta
+          diff_delta = -diff.a_blob.size
+        elsif diff.new_file
+          # if the file was just added, increase the delta by the size of the new blob
+          diff_delta = diff.b_blob.size
+        else
+          # find the change in bytes between the two blobs
+          diff_delta += diff.b_blob.size - diff.a_blob.size
+        end
+
+        commit_delta += diff_delta
+      end
+
+      bytes << prev_commit_bytes + commit_delta
+
+      puts " (#{bytes.last} bytes) #{commit_delta}" if $vv
     end
-    @bytes = @bytes.reverse
+
     LineChart.new(@size, 'Total Filesize') do |lc|
-      lc.data 'Bytes', @bytes
-      lc.axis :y, { :range => [0, @bytes.max] }
+      lc.data 'Bytes', bytes
+      lc.axis :y, { :range => [0, bytes.max] }
       @html += "<img src='#{lc.to_url}' alt='Total Filesize' /><br/>"
     end
   end
-  def bytes_add_tree(tree)
+
+  def bytes_recurse tree
+    bytes = 0
     tree.contents.each do |el|
-      if Blob === el
-        bytes_add_blob el
-      elsif Tree === el
-        bytes_add_tree el
+      if el.is_a? Blob
+        bytes += el.size
+      elsif el.is_a? Tree
+        bytes += bytes_recurse el
       end
     end
-  end
-  def bytes_add_blob(blob)
-    bytes = blob.size
-    @bytes[-1] += bytes
+
+    bytes
   end
 
   def chart_awesomeness
