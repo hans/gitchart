@@ -39,7 +39,7 @@
 # ruby platform.rb
 #
 module Platform
-   
+
    if RUBY_PLATFORM =~ /darwin/i
       OS = :unix
       IMPL = :macosx
@@ -77,9 +77,9 @@ module Platform
       OS = :unknown
       IMPL = :unknown
    end
-   
+
    # whither AIX, SOLARIS, and the other unixen?
-   
+
    if RUBY_PLATFORM =~ /(i\d86)/i
       ARCH = :x86
    elsif RUBY_PLATFORM =~ /ia64/i
@@ -91,9 +91,9 @@ module Platform
    else
       ARCH = :unknown
    end
-   
+
    # What about AMD, Turion, Motorola, etc..?
-   
+
 end
 
 if __FILE__ == $0
